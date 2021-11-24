@@ -1,0 +1,90 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="CAPA DE NEGOCIO" version="4">
+  <OBJECT>
+    <ID name="CAPA DE NEGOCIO" mc="Standard.Package" uid="d17ce2cc-541c-4ab9-b5f2-76b86b109dfd"/>
+    <PID name="decidt dclases" mc="Standard.Package" uid="a6a45876-e131-45fc-8605-c3e4ffb36421"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[CAPA DE NEGOCIO]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="PollTransfer" mc="Standard.Class" uid="a934d77b-b9d1-4cb5-87ac-229886e1376e"/>
+        <COMPID name="UserTransfer" mc="Standard.Class" uid="eb54f462-c1f7-4b8e-beae-5dae17e03d44"/>
+        <COMPID name="CommentTransfer" mc="Standard.Class" uid="d783274c-16f1-4486-8a65-50af86b785dd"/>
+        <COMPID name="CommentBO" mc="Standard.Class" uid="10d6edb4-a0cd-419b-998a-5a774acb3257"/>
+        <COMPID name="RandomAlgorithm" mc="Standard.Class" uid="f23cd7b9-baa1-4d25-8c6b-d1b0f0fde357"/>
+        <COMPID name="SAUser" mc="Standard.Interface" uid="b622838f-cfad-45f8-bbf9-b6d7a42dacb6"/>
+        <COMPID name="SAUser_Imp" mc="Standard.Class" uid="92845ccc-f32c-49a0-94e8-c28cb3e4eb57"/>
+        <COMPID name="SAPoll" mc="Standard.Interface" uid="0ec08d07-1c7a-4be7-b13e-7a4db0a80e91"/>
+        <COMPID name="SAPoll_Imp" mc="Standard.Class" uid="87a00290-f2b1-4107-a4ff-42cfc3a1e97b"/>
+        <OBJECT>
+          <ID name="EnumSkill" mc="Standard.Enumeration" uid="687c048d-a98e-41c1-8883-e048b01c6b21"/>
+          <ATTRIBUTES>
+            <ATT name="IsElementary">true</ATT>
+            <ATT name="IsAbstract">false</ATT>
+            <ATT name="IsLeaf">false</ATT>
+            <ATT name="IsRoot">false</ATT>
+            <ATT name="Visibility">Public</ATT>
+            <ATT name="Name"><![CDATA[EnumSkill]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <COMP relation="OwnedElement">
+              <COMPID name="Baby" mc="Standard.DataType" uid="55713a73-e742-4193-a5da-f5f67cb672a3"/>
+              <COMPID name="Child" mc="Standard.DataType" uid="aa899cd9-33eb-4908-9f01-2c10bbc14a76"/>
+              <COMPID name="Teenager" mc="Standard.DataType" uid="f7473235-a8b4-43b6-8ab5-d080d9b3e840"/>
+              <COMPID name="Adult" mc="Standard.DataType" uid="16364ec2-d71e-492c-bd14-c91a894ae83a"/>
+              <COMPID name="Elder" mc="Standard.DataType" uid="16d63cce-6811-4f29-a72f-8e7dffe77246"/>
+            </COMP>
+            <LINK relation="Extension">
+              <FOREIGNID name="JavaEnumeration" mc="Infrastructure.Stereotype" uid="01ec23a8-0000-0262-0000-000000000000"/>
+            </LINK>
+            <COMP relation="Descriptor">
+              <OBJECT>
+                <ID name="" mc="Infrastructure.Note" uid="7388ad57-00ba-44c1-b9b9-3754a456bac9"/>
+                <ATTRIBUTES>
+                  <ATT name="Content"><![CDATA[<Enter note text here>]]></ATT>
+                  <ATT name="MimeType"><![CDATA[text/plain]]></ATT>
+                  <ATT name="Name"></ATT>
+                  <ATT name="status">1970354901745664</ATT>
+                </ATTRIBUTES>
+                <DEPENDENCIES>
+                  <LINK relation="Model">
+                    <FOREIGNID name="description" mc="Infrastructure.NoteType" uid="00000000-0000-3e81-0000-000000000000"/>
+                  </LINK>
+                </DEPENDENCIES>
+              </OBJECT>
+            </COMP>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+      <LINK relation="Extension">
+        <FOREIGNID name="JavaPackage" mc="Infrastructure.Stereotype" uid="01ec23a8-0000-0126-0000-000000000000"/>
+      </LINK>
+      <COMP relation="Descriptor">
+        <OBJECT>
+          <ID name="Note" mc="Infrastructure.Note" uid="f131ca09-9408-4c95-9f4e-ff35d70ab3f3"/>
+          <ATTRIBUTES>
+            <ATT name="Content"><![CDATA[En PollTransfer, el atributo: OPTIONS en realidad es un array de pair, pues cada opción tiene su string y su score (int).
+
+Los métodos de la clase RandomAlgorithm son estátiucos, para que desde la capa de Presentación se les pueda llamar sin necesidad de tener una instancia de dicha clase.]]></ATT>
+            <ATT name="MimeType"><![CDATA[text/plain]]></ATT>
+            <ATT name="Name"><![CDATA[Note]]></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Model">
+              <FOREIGNID name="description" mc="Infrastructure.NoteType" uid="00000000-0000-3e81-0000-000000000000"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

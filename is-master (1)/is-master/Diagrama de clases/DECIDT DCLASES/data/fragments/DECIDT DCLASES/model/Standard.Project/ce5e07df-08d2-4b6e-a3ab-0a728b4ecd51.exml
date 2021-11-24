@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="DECIDT DCLASES" version="4">
+  <OBJECT>
+    <ID name="DECIDT DCLASES" mc="Standard.Project" uid="ce5e07df-08d2-4b6e-a3ab-0a728b4ecd51"/>
+    <ATTRIBUTES>
+      <ATT name="ProjectContext"></ATT>
+      <ATT name="ProjectDescr"></ATT>
+      <ATT name="Name"><![CDATA[DECIDT DCLASES]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="Model">
+        <COMPID name="decidt dclases" mc="Standard.Package" uid="a6a45876-e131-45fc-8605-c3e4ffb36421"/>
+      </COMP>
+      <COMP relation="DiagramRoot">
+        <COMPID name="DECIDT DCLASES" mc="Infrastructure.DiagramSet" uid="b9a594a2-dce3-4e90-8231-b244ffb8e6f8"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="Teenager" version="4">
+  <OBJECT>
+    <ID name="Teenager" mc="Standard.DataType" uid="f7473235-a8b4-43b6-8ab5-d080d9b3e840"/>
+    <PID name="decidt dclases" mc="Standard.Package" uid="a6a45876-e131-45fc-8605-c3e4ffb36421"/>
+    <ATTRIBUTES>
+      <ATT name="IsElementary">true</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[Teenager]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES></DEPENDENCIES>
+  </OBJECT>
+</EXT>

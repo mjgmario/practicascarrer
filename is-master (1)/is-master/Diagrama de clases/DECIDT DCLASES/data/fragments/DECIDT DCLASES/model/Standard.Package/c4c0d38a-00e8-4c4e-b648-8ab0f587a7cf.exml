@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="CAPA DE  INTEGRACIÓN" version="4">
+  <OBJECT>
+    <ID name="CAPA DE  INTEGRACIÓN" mc="Standard.Package" uid="c4c0d38a-00e8-4c4e-b648-8ab0f587a7cf"/>
+    <PID name="decidt dclases" mc="Standard.Package" uid="a6a45876-e131-45fc-8605-c3e4ffb36421"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[CAPA DE  INTEGRACIÓN]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="DAOUser" mc="Standard.Interface" uid="df219638-f809-4da2-9a7c-de099d1edfb0"/>
+        <COMPID name="DAOUser_Imp" mc="Standard.Class" uid="b6ba3b3e-3c65-46e8-9592-29852cbf9216"/>
+        <COMPID name="DAOPoll" mc="Standard.Interface" uid="1969613b-6528-408d-95fe-37b4fc594da2"/>
+        <COMPID name="DAOPoll_Imp" mc="Standard.Class" uid="4cb72fb3-93c5-4d90-a44c-d4fe36a943cd"/>
+      </COMP>
+      <LINK relation="Extension">
+        <FOREIGNID name="JavaPackage" mc="Infrastructure.Stereotype" uid="01ec23a8-0000-0126-0000-000000000000"/>
+      </LINK>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

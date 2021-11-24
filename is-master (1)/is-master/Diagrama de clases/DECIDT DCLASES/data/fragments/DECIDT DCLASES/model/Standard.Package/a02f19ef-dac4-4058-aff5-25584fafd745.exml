@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="CAPA DE PRESENTACIÓN" version="4">
+  <OBJECT>
+    <ID name="CAPA DE PRESENTACIÓN" mc="Standard.Package" uid="a02f19ef-dac4-4058-aff5-25584fafd745"/>
+    <PID name="decidt dclases" mc="Standard.Package" uid="a6a45876-e131-45fc-8605-c3e4ffb36421"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[CAPA DE PRESENTACIÓN]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="ControllerPhone" mc="Standard.Class" uid="d11d677d-5ca2-44cd-9143-cd5992e735a8"/>
+        <COMPID name="Main" mc="Standard.Class" uid="e2a4fe3f-425c-44eb-a0d3-ba0fb2177261"/>
+        <COMPID name="GUIPHONE_LogIn" mc="Standard.Class" uid="2b73d8c9-391c-455b-abd1-0b309148a83e"/>
+        <COMPID name="GUIPHONE_MenuInit" mc="Standard.Class" uid="23138a44-6330-4691-9d57-df61f7d9c1e9"/>
+        <COMPID name="GUIPHONE_CreateRoulette" mc="Standard.Class" uid="f90faa00-b27c-42ac-87d6-2fea3136dc73"/>
+        <COMPID name="GUIPHONE_ShowRoulette" mc="Standard.Class" uid="3829f048-db16-4c17-97d7-51bc8a61caf8"/>
+        <COMPID name="GUIPHONE_ShowOnePoll" mc="Standard.Class" uid="184762d5-f535-43c3-9023-9c89a9896a35"/>
+        <COMPID name="GUPHONE_PollBoard" mc="Standard.Class" uid="c684e2d6-e723-43ca-94af-32629fe24842"/>
+        <COMPID name="GUIPHONE_UserProfile" mc="Standard.Class" uid="489e3385-f716-4de0-b817-a1e2abec76de"/>
+        <COMPID name="GUIPHONE_createTournament" mc="Standard.Class" uid="534edd74-6284-45f7-a9d0-8f9da3468cdd"/>
+        <COMPID name="GUIPHONE_showTournament" mc="Standard.Class" uid="06721998-2208-47cc-be71-1204053d702a"/>
+        <COMPID name="GUIPHONE_CreatePoll" mc="Standard.Class" uid="5726de23-024c-48d0-9c60-5db18305ed7d"/>
+      </COMP>
+      <LINK relation="Extension">
+        <FOREIGNID name="JavaPackage" mc="Infrastructure.Stereotype" uid="01ec23a8-0000-0126-0000-000000000000"/>
+      </LINK>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

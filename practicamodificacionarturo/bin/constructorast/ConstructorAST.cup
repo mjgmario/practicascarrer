@@ -1,0 +1,430 @@
+package constructorast;
+
+import java_cup.runtime.*;
+import alex.*;
+import ast.*;
+import errors.GestionErroresExp;
+import java.util.List;
+import java.util.ArrayList;
+
+scan with {: return getScanner().next_token(); :};
+
+action code {:
+   private AS as = new AS();
+:};
+
+parser code {: 
+   private GestionErroresExp errores;
+   public void syntax_error(Symbol unidadLexica) {
+     errores.errorSintactico((UnidadLexica)unidadLexica);
+   }
+:};
+init with {: 
+   errores = new GestionErroresExp();
+   AnalizadorLexicoExp alex = (AnalizadorLexicoExp)getScanner();
+   alex.fijaGestionErrores(errores);
+:};
+
+
+terminal     TokenValue   FOR, APERTPARENTESIS, CIERREPARENTESIS, PUNTOYCOMA, PUNTO, COMA, APERTLLAVES, CIERRELLAVES, NOMBRET, NOMBREV, IN, WHILE, IGUAL, BOOL, CHAR, INT, DOUBLE,
+                STRING, VECTOR, MENOR, MAYOR, RETURN, PORREFERENCIA, ENUM, STRUCT, TYPEDEF, SWITCH, CASE, DOSPUNTOS, BREAK, DEFAULT, IF, ELSEIF, ELSE,
+		NEW, OR, AND, IGUALIGUAL, MAYORIGUAL, MENORIGUAL, SUMA, RESTA, DIV, MODULO, MUL, TRUE, FALSE, NOT, ABRECORCHETE, CIERRACORCHETE, NULL,
+		ENT, DECIMAL, CARACTER, FLECHA,VOID,DISTINTO;	
+		
+
+non terminal A A;
+non terminal retornoFuncion  FuncionConRetorno;
+non terminal Type Type;
+non terminal E Expresion,  ExpresionNew,Expresion1, Expresionaux1,
+		Expresionaux2,Expresionaux3,  Expresionaux4, Expresionaux5,Expresionaux6,Expresionaux7,
+		Expresionaux8, Expresionaux9, LlamadaFuncReturn,CreacionVector,CreacionVector2,CreacionPuntero;
+non terminal ArrayList<E> Argumentos, ListaArgumentos, ListaEnum, Vector;
+non terminal ArrayList<ParametroFuncion> ListaDecArgAux, ListaDecArg;
+non terminal ArrayList<ElementosCase>  ListaSwitch;
+non terminal ArrayList<Subprogramas>  ListaStruct;
+non terminal ArrayList<ElseIf> ListaElseIf;
+non terminal Subprogramas BucleFor, BucleWhile, Asignacion,SwitchDef,
+			Funcion, DecTipo, B, DecEnum, DecStruct, CondicionalIf,LlamadaFuncVoid, 
+			 DeclaracionVar,DeclaracionConVi,DeclaracionSinVi;
+
+A ::= B:progaux A:programa 
+	{:programa.codigo(progaux); RESULT = programa; :};
+A ::= 
+        {: RESULT = as.A(); :};
+
+B ::= BucleFor:etiquetaBucle 
+		{: RESULT = etiquetaBucle; :};
+
+B ::= BucleWhile:etiquetaBucle 
+		{: RESULT = etiquetaBucle; :};	
+
+B ::= DeclaracionVar:etiquetaDec 
+		{: RESULT = etiquetaDec; :};	
+
+B ::= Asignacion:etiquetaAsig PUNTOYCOMA
+		{: RESULT = etiquetaAsig; :};
+		
+B ::= SwitchDef:etiquetaSwitchDef 
+		{: RESULT = etiquetaSwitchDef; :};
+
+B ::= Funcion:etiquetaFuncion 
+		{: RESULT = etiquetaFuncion; :};
+B ::= DecTipo:etiquetaDecTipo 
+		{: RESULT = etiquetaDecTipo; :};
+B ::= DecEnum:etiquetaDecEnum 
+		{: RESULT = etiquetaDecEnum; :};
+B ::= DecStruct:etiquetaDecStruct 
+		{: RESULT = etiquetaDecStruct; :};
+
+B ::= LlamadaFuncVoid:etiquetaLlamadaFunc
+		{: RESULT = etiquetaLlamadaFunc; :};
+		
+B ::= CondicionalIf:etiquetaCondicionalIf 
+		{: RESULT = etiquetaCondicionalIf; :};
+
+
+BucleFor ::= FOR:forToken APERTPARENTESIS DeclaracionConVi:decVI  Expresion1:condicion PUNTOYCOMA Asignacion:exprPaso CIERREPARENTESIS APERTLLAVES A:prog CIERRELLAVES 
+	{: RESULT = as.buclefor1(prog,decVI ,condicion, exprPaso , forToken.getFila(), forToken.getColumna());:};
+	
+BucleFor ::= FOR:forToken APERTPARENTESIS NOMBREV:variable IN NOMBREV:conjunto CIERREPARENTESIS APERTLLAVES A:prog CIERRELLAVES 
+        {: RESULT = as.buclefor2(prog,as.nombre(variable.getLexema(),variable.getFila(), variable.getColumna()),as.nombre(conjunto.getLexema(),conjunto.getFila(),  conjunto.getColumna()) , forToken.getFila(), forToken.getColumna());:};
+
+BucleFor ::= FOR APERTPARENTESIS error Expresion1:condicion PUNTOYCOMA Asignacion:exprPaso CIERREPARENTESIS APERTLLAVES A:prog CIERRELLAVES 
+	{: System.err.println("Error en la declaracion inicial de for\n");   RESULT = null; :};
+
+BucleFor ::= FOR APERTPARENTESIS DeclaracionConVi error  Asignacion:exprPaso CIERREPARENTESIS APERTLLAVES A:prog CIERRELLAVES 
+	{: System.err.println("Error en condiciones de for\n");   RESULT = null; :};
+
+BucleFor ::= FOR APERTPARENTESIS DeclaracionConVi Expresion1 PUNTOYCOMA error CIERREPARENTESIS APERTLLAVES A:prog CIERRELLAVES 
+	{: System.err.println("Error en la 3 parte del for de for\n");   RESULT = null; :};
+
+
+BucleFor ::= FOR APERTPARENTESIS NOMBREV IN  error   CIERREPARENTESIS APERTLLAVES A:prog CIERRELLAVES 
+	{: System.err.println("Error en  dec segunda for2  for2\n");   RESULT = null; :};
+
+
+BucleWhile ::= WHILE:whileToken APERTPARENTESIS Expresion1:condicion CIERREPARENTESIS APERTLLAVES A:prog CIERRELLAVES 
+		{: RESULT = as.BucleWhile(prog,condicion, whileToken.getFila(), whileToken.getColumna());:};
+
+BucleWhile ::= WHILE APERTPARENTESIS error CIERREPARENTESIS APERTLLAVES A:prog CIERRELLAVES   
+		{: System.err.println("Error en la condición while\n");   RESULT = null; :};
+
+BucleWhile ::= WHILE APERTPARENTESIS Expresion1:condicion  APERTLLAVES A:prog CIERRELLAVES   
+		{: System.err.println("Error, no se cierra parentesis\n"); RESULT = null; :};
+
+DeclaracionVar ::= DeclaracionConVi:resuldecConVi 
+		{: RESULT = resuldecConVi; :};
+
+DeclaracionVar ::= DeclaracionSinVi:resuldecSinVi 
+		{: RESULT = resuldecSinVi; :};
+
+DeclaracionSinVi ::= Type:type NOMBREV:nom PUNTOYCOMA 
+		{: RESULT = as.decsinVi(type,as.nombre(nom.getLexema(),nom.getFila(),  nom.getColumna()),  nom.getFila(), nom.getColumna()); :};
+
+DeclaracionConVi ::= Type:type NOMBREV:nom IGUAL Expresion:expr PUNTOYCOMA 
+		{: RESULT = as.decconVi(type,expr, as.nombre(nom.getLexema(),nom.getFila(),  nom.getColumna()),  nom.getFila(), nom.getColumna()); :};
+
+Asignacion ::= Expresion1:resulvar IGUAL:igualToken Expresion:expr  
+		{: RESULT = as.Asignacion(resulvar,expr, igualToken.getFila(), igualToken.getColumna()); :}; 
+Asignacion ::= Expresion1:resulvar IGUAL error PUNTOYCOMA 
+		{: System.err.println("Error en asignacion\n"); RESULT = null; :};
+
+Type ::= BOOL 
+		{:RESULT = as.decTipoBool(); :};
+
+Type ::= CHAR 
+		{:RESULT = as.decTipoCHAR(); :};
+Type ::= INT 
+		{:RESULT = as.decTipoINT(); :};
+Type ::= DOUBLE 
+		{:RESULT = as.decTipoDOUBLE(); :};
+Type ::= STRING
+		{:RESULT = as.decTipoString(); :};
+Type ::= Type:typetoken MUL:mulToken 
+		{:RESULT = as.decTipoPuntero(typetoken, mulToken.getFila(), mulToken.getColumna()); :};
+
+Type ::= VECTOR:tokenVect MENOR Type:typetoken MAYOR 
+		{:RESULT = as.decTipoVector(typetoken, tokenVect.getFila(), tokenVect.getColumna()); :};
+Type ::= VECTOR error MAYOR 
+		{: System.err.println("Error en el tipo del vector\n"); RESULT = null; :};
+
+Type ::= NOMBRET: nom
+		{:RESULT = as.TipoUsuario(nom.getLexema(), nom.getFila(), nom.getColumna()); :};
+
+LlamadaFuncReturn ::= NOMBREV:nom APERTPARENTESIS Argumentos:list CIERREPARENTESIS  
+		{:RESULT = as.LlamadaFuncReturn(list, as.nombre(nom.getLexema(), nom.getFila(), nom.getColumna()), nom.getFila(), nom.getColumna()); :}; 
+
+LlamadaFuncReturn ::= NOMBREV APERTPARENTESIS Argumentos error 
+		{: System.err.println("Error, falta cerrar parentesis\n"); RESULT = null; :};
+
+LlamadaFuncVoid ::= NOMBREV:nom APERTPARENTESIS Argumentos:list CIERREPARENTESIS PUNTOYCOMA 
+		{:RESULT = as.LlamadaFuncVoid(list, as.nombre(nom.getLexema(), nom.getFila(), nom.getColumna()), nom.getFila(), nom.getColumna()); :}; 
+LlamadaFuncVoid ::= NOMBREV:nom error Argumentos:list CIERREPARENTESIS 
+		{: System.err.println("Error, falta parentesis tras el nombre de la funcion\n"); RESULT = null; :};
+LlamadaFuncVoid ::= NOMBREV APERTPARENTESIS Argumentos error 
+		{: System.err.println("Error, falta cerrar parentesis\n"); RESULT = null; :};
+
+Argumentos ::= ListaArgumentos:list 
+		{:RESULT = list; :};
+
+Argumentos ::= 
+		{:RESULT = new ArrayList<E>(); :};
+
+ListaArgumentos ::= Expresion1:expr COMA ListaArgumentos:list 
+		{: list.add(expr); RESULT = list; :};
+
+ListaArgumentos ::=  Expresion1:expr 
+		{: ArrayList<E> resul = new ArrayList<E>();resul.add(expr); RESULT = resul; :};
+
+
+Funcion ::= Type:tipoRetorno NOMBREV:nom APERTPARENTESIS:parenToken ListaDecArg:list CIERREPARENTESIS APERTLLAVES FuncionConRetorno:cuerpo CIERRELLAVES 
+		{:RESULT = as.decFuncionConReturn(as.nombre(nom.getLexema(), nom.getFila(), nom.getColumna()), list ,cuerpo, nom.getFila(), nom.getColumna(), tipoRetorno ); :};
+Funcion ::= error NOMBREV:nom APERTPARENTESIS:parenToken ListaDecArg:list CIERREPARENTESIS APERTLLAVES FuncionConRetorno:cuerpo CIERRELLAVES 
+		{: System.err.println("Error en declaracion de la funcion con retorno\n"); RESULT = null; :};
+Funcion ::= Type NOMBREV error ListaDecArg:list CIERREPARENTESIS APERTLLAVES FuncionConRetorno:cuerpo CIERRELLAVES 
+		{: System.err.println("Error, falta parentesis \n"); RESULT = null; :};
+Funcion ::= Type NOMBREV APERTPARENTESIS ListaDecArg:list error APERTLLAVES FuncionConRetorno:cuerpo CIERRELLAVES 
+		{: System.err.println("Error, falta parentesis\n"); RESULT = null; :};
+
+Funcion ::= VOID NOMBREV:nom APERTPARENTESIS:parenToken ListaDecArg:list CIERREPARENTESIS APERTLLAVES A:cuerpo CIERRELLAVES 
+		{:RESULT = as.decFuncionSinReturn(as.nombre(nom.getLexema(), nom.getFila(), nom.getColumna()), list ,cuerpo, nom.getFila(), nom.getColumna() ); :};
+
+FuncionConRetorno ::= A:cuerpo RETURN:returnToken Expresion1:expr PUNTOYCOMA 
+		{:RESULT = as.retornoFuncion(cuerpo, expr , returnToken.getFila(), returnToken.getColumna() ); :};
+	
+
+ListaDecArg ::= Type:tipo NOMBREV:nom ListaDecArgAux :list 
+		{: list.add(as.ParametroFuncion(false, tipo, as.nombre(nom.getLexema(), nom.getFila(), nom.getColumna()), nom.getFila(), nom.getColumna() )); RESULT = list; :};
+
+ListaDecArg ::= Type:tipo PORREFERENCIA NOMBREV:nom ListaDecArgAux :list 
+		{: list.add(as.ParametroFuncion(true, tipo, as.nombre(nom.getLexema(), nom.getFila(), nom.getColumna()), nom.getFila(), nom.getColumna() )); RESULT = list; :};
+
+
+ListaDecArgAux ::= 
+		{: RESULT = new ArrayList<ParametroFuncion>(); :};
+		
+ListaDecArgAux ::= COMA Type:tipo NOMBREV:nom  ListaDecArgAux:list  
+		{: list.add(as.ParametroFuncion(false, tipo, as.nombre(nom.getLexema(), nom.getFila(), nom.getColumna()), nom.getFila(), nom.getColumna() )); RESULT = list; :};
+
+
+ListaDecArgAux ::= COMA Type:tipo PORREFERENCIA NOMBREV:nom  ListaDecArgAux:list 
+		{: list.add(as.ParametroFuncion(true, tipo, as.nombre(nom.getLexema(), nom.getFila(), nom.getColumna()), nom.getFila(), nom.getColumna() )); RESULT = list; :};
+
+DecEnum ::= ENUM:enumToken NOMBREV:nom IGUAL APERTLLAVES ListaEnum:list CIERRELLAVES PUNTOYCOMA 
+	    {: RESULT = as.decEnum( as.nombre(nom.getLexema(), nom.getFila(), nom.getColumna()),  enumToken.getFila(), enumToken.getColumna(), list); :};
+
+ListaEnum ::= NOMBREV:nom COMA ListaEnum:list 
+		{: list.add(as.nombre(nom.getLexema(), nom.getFila(), nom.getColumna())); RESULT = list; :};
+
+ListaEnum ::=  NOMBREV:nom 
+	{: ArrayList<E> resul = new ArrayList<E>(); 
+		resul.add(as.nombre(nom.getLexema(), nom.getFila(), nom.getColumna()));
+		RESULT = resul; :};
+
+
+DecStruct ::= STRUCT:structToken NOMBRET:nom APERTLLAVES ListaStruct:list CIERRELLAVES 
+		{: RESULT = as.decStruct(  list,as.TipoUsuario(nom.getLexema(), nom.getFila(), nom.getColumna()), structToken.getFila(), structToken.getColumna()); :};
+DecStruct ::= STRUCT error 
+		{: System.err.println("Error en el nombre del struct struct\n"); RESULT = null; :};
+DecStruct ::= STRUCT NOMBREV error 
+		{: System.err.println("Error dentro del structToken\n"); RESULT = null; :};
+
+
+ListaStruct ::= DeclaracionVar:var ListaStruct:list 
+	{: list.add(var); RESULT = list; :};
+
+ListaStruct ::=  
+	{: RESULT = new ArrayList<Subprogramas>(); :};
+
+
+DecTipo ::= TYPEDEF:typedetoken Type:type NOMBRET:nom PUNTOYCOMA 
+	{: RESULT = as.decTipoUsuario(as.nombre(nom.getLexema(), nom.getFila(), nom.getColumna()),type, typedetoken.getFila(), typedetoken.getColumna()); :};
+DecTipo ::= TYPEDEF error NOMBRET PUNTOYCOMA 
+		{: System.err.println("Error dentro del typedef el tipo no existe\n"); RESULT = null; :};
+DecTipo ::= TYPEDEF Type error PUNTOYCOMA 
+		{: System.err.println("Error dentro del typedef en el nuevo nombre del tipo typedef\n"); RESULT = null; :};
+
+
+SwitchDef ::= SWITCH:switchToken APERTPARENTESIS Expresion1:expr CIERREPARENTESIS APERTLLAVES ListaSwitch:list CIERRELLAVES 
+		{: RESULT = as.Switch(expr, list, switchToken.getFila(), switchToken.getColumna()); :};
+SwitchDef ::= SWITCH  error  Expresion1:expr CIERREPARENTESIS APERTLLAVES ListaSwitch:list CIERRELLAVES 
+		{: System.err.println("Error, falta parentesis en el switch\n"); RESULT = null; :};
+
+SwitchDef ::= SWITCH  APERTPARENTESIS Expresion1  error  APERTLLAVES ListaSwitch:list CIERRELLAVES
+		{: System.err.println("Error, falta cerrar parentesis en el switch\n"); RESULT = null; :};
+
+
+ListaSwitch ::= CASE:tokenCase APERTPARENTESIS Expresion1:expr CIERREPARENTESIS DOSPUNTOS APERTLLAVES A:prog  BREAK PUNTOYCOMA CIERRELLAVES ListaSwitch:list 
+		{:list.add(as.ElementosCase(prog,expr, tokenCase.getFila(), tokenCase.getColumna()));
+        RESULT = list; :};
+ListaSwitch ::= CASE  error  Expresion1:expr CIERREPARENTESIS DOSPUNTOS APERTLLAVES A:prog  BREAK PUNTOYCOMA CIERRELLAVES ListaSwitch:list 
+		{: System.err.println("Error, falta parentesis en el case\n"); RESULT = null; :};
+ListaSwitch ::= CASE  APERTPARENTESIS  Expresion1:expr error DOSPUNTOS APERTLLAVES A:prog  BREAK PUNTOYCOMA CIERRELLAVES ListaSwitch:list  
+		{: System.err.println("Error, falta cerrar parentesis en el case\n"); RESULT = null; :};
+
+	   
+ListaSwitch ::=  DEFAULT:defaulttoken DOSPUNTOS APERTLLAVES A:prog  BREAK PUNTOYCOMA CIERRELLAVES
+				{: ArrayList<ElementosCase> list = new ArrayList<ElementosCase>();
+	 	list.add(as.ElementosCase(prog, as.nombre("default",  defaulttoken.getFila(), defaulttoken.getColumna()), defaulttoken.getFila(), defaulttoken.getColumna()));
+	 	RESULT = list; :};
+ListaSwitch ::=  DEFAULT error PUNTOYCOMA 
+		{: System.err.println("Error en default\n"); RESULT = null; :};
+
+CondicionalIf ::= IF:IfToken APERTPARENTESIS Expresion1:cond CIERREPARENTESIS APERTLLAVES A:prog CIERRELLAVES 
+{: RESULT = as.ifSinElse(prog, cond, IfToken.getFila(), IfToken.getColumna()); :};
+
+CondicionalIf ::=  IF:ifToken APERTPARENTESIS Expresion1:cond CIERREPARENTESIS APERTLLAVES A:prog1 CIERRELLAVES ListaElseIf:list ELSE APERTLLAVES A:prog2 CIERRELLAVES 
+{: RESULT = as.ifConElse(prog1,prog2, list,  cond, ifToken.getFila(), ifToken.getColumna()); :};
+
+CondicionalIf ::= IF error Expresion1:cond CIERREPARENTESIS APERTLLAVES A:prog1 CIERRELLAVES ListaElseIf:list ELSE APERTLLAVES A:prog2 CIERRELLAVES 
+{: System.err.println("Error, falta parentesis en if\n");  RESULT = null; :};
+
+CondicionalIf ::= IF APERTPARENTESIS Expresion1 CIERREPARENTESIS error APERTLLAVES A:prog1 CIERRELLAVES ListaElseIf:list ELSE APERTLLAVES A:prog2 CIERRELLAVES 
+{: System.err.println("Error, falta cerrar parentesis en if\n");  RESULT = null; :};
+
+ListaElseIf ::= ELSEIF:elseifToken APERTPARENTESIS Expresion1:expr CIERREPARENTESIS APERTLLAVES A:prog CIERRELLAVES ListaElseIf:list 
+ {:list.add(as.ElseIf(expr, prog, elseifToken.getFila(), elseifToken.getColumna()));
+       RESULT = list; :};
+
+ListaElseIf ::=  
+		{: RESULT = new ArrayList<ElseIf>(); :};
+
+
+Expresion ::=  Expresion1:expr 
+		{: RESULT= expr; :};
+Expresion ::=  ExpresionNew:newToken 
+		{: RESULT= newToken; :};
+Expresion ::=  CreacionVector:vectorToken 
+		{: RESULT= vectorToken; :};
+Expresion ::= CreacionPuntero: punteroToken 
+                {: RESULT = punteroToken; :};
+
+Expresion1 ::= LlamadaFuncReturn: fun
+		{: RESULT= fun; :};
+
+Expresion1 ::= Expresionaux1:expr1 OR:orToken Expresion1:expr2 
+		{: RESULT= as.or(expr1, expr2, orToken.getFila(), orToken.getColumna()); :};
+
+Expresion1 ::= Expresionaux1:expr1 
+        {: RESULT = expr1; :};
+
+Expresionaux1 ::= Expresionaux1:expr1 AND:andToken Expresionaux2:expr2 
+		{: RESULT= as.And(expr1, expr2, andToken.getFila(), andToken.getColumna()); :};
+
+Expresionaux1 ::= Expresionaux2:expr 
+		{: RESULT= expr; :};
+
+Expresionaux2 ::= Expresionaux3:expr1 IGUALIGUAL:igualToken Expresionaux2:expr2 
+		{: RESULT= as.igualIgual(expr1, expr2, igualToken.getFila(), igualToken.getColumna()); :};
+		
+Expresionaux2 ::= Expresionaux3:expr 
+                {: RESULT= expr; :};
+
+Expresionaux2 ::= Expresionaux3:expr1 MAYOR:mayorToken Expresionaux2:expr2 
+		{: RESULT= as.mayor(expr1, expr2, mayorToken.getFila(), mayorToken.getColumna()); :};
+
+Expresionaux2 ::= Expresionaux3:expr1 MENOR:menorToken Expresionaux2:expr2 
+		{: RESULT= as.menor(expr1, expr2, menorToken.getFila(), menorToken.getColumna()); :};
+
+Expresionaux2 ::= Expresionaux3:expr1 MAYORIGUAL:mayorToken Expresionaux2:expr2 
+		{: RESULT= as.mayorigual(expr1, expr2, mayorToken.getFila(), mayorToken.getColumna()); :};
+
+Expresionaux2 ::= Expresionaux3:expr1 DISTINTO:distintoToken Expresionaux2:expr2 
+		{: RESULT= as.Distinto(expr1, expr2, distintoToken.getFila(), distintoToken.getColumna()); :};
+
+Expresionaux2 ::= Expresionaux3:expr1 MENORIGUAL:menorToken Expresionaux2:expr2 
+		{: RESULT= as.menorIgual(expr1, expr2, menorToken.getFila(), menorToken.getColumna()); :};
+
+Expresionaux3 ::= Expresionaux4:expr1 SUMA:sumToken Expresionaux3:expr2 
+		{: RESULT= as.Suma(expr1, expr2, sumToken.getFila(), sumToken.getColumna()); :};
+
+Expresionaux3 ::= Expresionaux4:expr1 RESTA:resta Expresionaux3:expr2 
+		{: RESULT= as.resta(expr1, expr2, resta.getFila(), resta.getColumna()); :};
+
+Expresionaux3 ::= Expresionaux4:expr 
+	        {: RESULT = expr; :};
+
+Expresionaux4 ::= Expresionaux4:expr1 DIV:divToken Expresionaux5:expr2 
+		{: RESULT= as.Div(expr1, expr2, divToken.getFila(), divToken.getColumna()); :};
+
+Expresionaux4 ::=  Expresionaux4:expr1 MODULO:modToken Expresionaux5:expr2 
+		{: RESULT= as.mod(expr1, expr2, modToken.getFila(), modToken.getColumna()); :};
+
+
+Expresionaux4 ::=  Expresionaux4:expr1 MUL:mulToken Expresionaux5:expr2  
+		{: RESULT= as.mul(expr1, expr2, mulToken.getFila(), mulToken.getColumna()); :};
+Expresionaux4 ::= Expresionaux5:expr 
+	        {: RESULT = expr; :};
+
+
+Expresionaux5 ::=  NOT:notToken Expresionaux5:expr 
+	        {: RESULT = as.not(expr, notToken.getFila(), notToken.getColumna()); :};
+Expresionaux5 ::= Expresionaux6:expr 
+		{: RESULT= expr; :};
+
+
+Expresionaux6 ::= Expresionaux6:expr1 ABRECORCHETE:corcheteToken Expresion1:expr2 CIERRACORCHETE
+	{:RESULT = as.corchetesVector(expr1, expr2, corcheteToken.getFila(), corcheteToken.getColumna()); :};
+
+Expresionaux6 ::= Expresionaux6:exp PUNTO:puntoToken NOMBREV:nom 
+	{:RESULT = as.accesoStruct(as.nombre(nom.getLexema(), nom.getFila(), nom.getColumna()),exp, puntoToken.getFila(), puntoToken.getColumna()); :};
+Expresionaux6 ::= Expresionaux6:exp FLECHA:flechaToken NOMBREV:nom 
+	{:RESULT = as.accesoStructPuntero(exp, as.nombre(nom.getLexema(), nom.getFila(), nom.getColumna()), flechaToken.getFila(), flechaToken.getColumna()); :};
+
+
+Expresionaux6 ::= Expresionaux7:expr 
+                {: RESULT = expr; :};
+				
+Expresionaux7 ::= SUMA:sumaToken Expresionaux8:expr 
+	        {: RESULT = as.opSuma(expr, sumaToken.getFila(), sumaToken.getColumna()); :};
+
+Expresionaux7 ::= RESTA:restaToken Expresionaux8:expr 
+	        {: RESULT = as.opResta(expr, restaToken.getFila(), restaToken.getColumna()); :};
+Expresionaux7 ::= Expresionaux8:expr
+                {: RESULT = expr; :};
+
+Expresionaux8 ::= NOMBREV:nom 
+		{: RESULT= as.nombre(nom.getLexema(), nom.getFila(), nom.getColumna()); :};
+
+Expresionaux8 ::= APERTPARENTESIS:parToken Expresion:expr CIERREPARENTESIS 
+                {: RESULT = as.entreparentesis(expr, parToken.getFila(), parToken.getColumna()); :};
+
+Expresionaux8 ::= Expresionaux9: expr
+				{: RESULT = expr; :};
+
+Expresionaux9 ::= ENT:ent 
+		{: RESULT= as.entero(ent.getLexema(), ent.getFila(), ent.getColumna()); :};
+
+Expresionaux9 ::= DECIMAL:dec 
+		{: RESULT= as.decimal(dec.getLexema(), dec.getFila(), dec.getColumna()); :};
+
+Expresionaux9 ::= CARACTER:car 
+		{: RESULT= as.caract(car.getLexema(), car.getFila(), car.getColumna()); :};
+
+Expresionaux9 ::= TRUE:tru
+	       {: RESULT= as.True(tru.getFila(), tru.getColumna()); :};
+
+Expresionaux9 ::= FALSE:fals 
+	       {: RESULT= as.False(fals.getFila(), fals.getColumna()); :};
+
+
+ExpresionNew ::= NEW:newToken Type:type 
+		{: RESULT= as.exprNew(false, type, newToken.getFila(), newToken.getColumna()); :};
+ExpresionNew ::= NULL:newToken
+		{: RESULT= as.exprNew(true,null, newToken.getFila(), newToken.getColumna()); :}; 
+
+CreacionVector ::= APERTPARENTESIS:token Expresion1: tam COMA Expresion1: inicializado CIERREPARENTESIS 	
+                {:RESULT = as.creacionVector(tam,inicializado,token.getFila(),token.getColumna()); :};
+
+CreacionVector2 ::= ABRECORCHETE:corToken Vector:vec  CIERRACORCHETE
+                {:RESULT = as.creacionVector2(vec, corToken.getFila(),corToken.getColumna()); :};
+
+Vector ::= Expresionaux9: expr 
+                {:ArrayList<E> list = new ArrayList<E>(); list.add(expr); RESULT = list; :};
+
+Vector ::= Expresionaux9: expr COMA Vector:vec 
+                {: vec.add(expr); RESULT = vec; :};
+
+CreacionPuntero ::= PORREFERENCIA Expresion1: expr 
+                {:RESULT = expr; :};
+

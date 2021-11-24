@@ -1,0 +1,37 @@
+{
+   "a": {
+      "score": 125,
+      "password": "a",
+      "friends": []
+   },
+   "s": {
+      "score": 0,
+      "password": "s",
+      "friends": []
+   },
+   "w": {
+      "score": 0,
+      "password": "w",
+      "friends": []
+   },
+   "Pruebas": {
+      "score": 45,
+      "password": "a",
+      "friends": []
+   },
+   "ProbarVotacion": {
+      "score": 0,
+      "password": "a",
+      "friends": []
+   },
+   "CrearVotacion": {
+      "score": 0,
+      "password": "crearvotacion",
+      "friends": []
+   },
+   "Votar": {
+      "score": 0,
+      "password": "votar",
+      "friends": []
+   }
+}

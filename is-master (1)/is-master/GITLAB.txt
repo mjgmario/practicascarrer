@@ -1,0 +1,4 @@
+TRUCOS DE GIT:
+git revert (codigo del commit que no quiero): recupera la version anterior.
+Si no se hace un commit y se hace un full, se descarga lo de arriba y se borra lo local
+

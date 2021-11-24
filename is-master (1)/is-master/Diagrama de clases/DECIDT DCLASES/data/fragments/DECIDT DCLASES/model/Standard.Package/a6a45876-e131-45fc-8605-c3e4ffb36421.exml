@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="DIAGRAMA_CLASES" version="4">
+  <OBJECT>
+    <ID name="DIAGRAMA_CLASES" mc="Standard.Package" uid="a6a45876-e131-45fc-8605-c3e4ffb36421"/>
+    <PID name="DECIDT DCLASES" mc="Standard.Project" uid="ce5e07df-08d2-4b6e-a3ab-0a728b4ecd51"/>
+    <ATTRIBUTES>
+      <ATT name="IsInstantiable">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[DIAGRAMA_CLASES]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <COMP relation="OwnedElement">
+        <COMPID name="CAPA DE PRESENTACIÓN" mc="Standard.Package" uid="a02f19ef-dac4-4058-aff5-25584fafd745"/>
+        <COMPID name="CAPA DE NEGOCIO" mc="Standard.Package" uid="d17ce2cc-541c-4ab9-b5f2-76b86b109dfd"/>
+        <COMPID name="CAPA DE  INTEGRACIÓN" mc="Standard.Package" uid="c4c0d38a-00e8-4c4e-b648-8ab0f587a7cf"/>
+      </COMP>
+      <COMP relation="Product">
+        <COMPID name="DIAGRAMA DE CLASES" mc="Standard.ClassDiagram" uid="dec3e624-8d84-4bad-a4d7-30b897214113"/>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>
